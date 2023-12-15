@@ -98,6 +98,7 @@ app.get('/today', async (req, res) => {
     if (!authCookies) {
       // Redirige vers /login pour déclencher le processus de connexion
       return res.redirect('/login');
+      
     }
 
     const today = dayjs().format('YYYY-MM-DD');
@@ -113,6 +114,7 @@ app.get('/today', async (req, res) => {
     });
 
     const data = await response.text();
+    console.log(data, 'DATA')
     res.send(data);
   } catch (error) {
     console.error(error);
@@ -140,6 +142,7 @@ app.get('/todaymel', async (req, res) => {
       });
   
       const data = await response.text();
+     
       res.send(data);
     } catch (error) {
       console.error(error);
