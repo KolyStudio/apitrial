@@ -30,8 +30,8 @@ async function performLogin() {
     await page.type('#email-address', 'PierreTorres');
     await page.type('#password', 'agdHn8DMnc#J!zjm');
 
-    const selector2 = '.relative.flex.justify-center.w-full.px-4.py-2.text-sm.font-medium.text-white.bg-green-500.border.border-transparent.rounded-md.group.focus\\:outline-none.focus\\:ring-2.focus\\:ring-green-500.focus\\:ring-offset-2.opacity-100.hover\\:bg-green-600';
-    await page.$eval(selector, button => button.click());
+    const selector2 = 'button[type="submit"].bg-green-500';
+    await page.$eval(selector2, button => button.click());
 
 
 
@@ -50,15 +50,16 @@ async function performLoginMel() {
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
 
-      await page.goto('https://www.prelinker.com');
-      await page.click('button:text("connexion")');
-      await page.type('#email-address', 'Meldje');
-      await page.type('#password', 'PANLDhGAd5Ho#gBp');
+      await page.goto('https://www.prelinker.com/b/#/');
+      const selector = 'button.lg\\:mt-0.block.lg\\:inline-block.bg-transparent.hover\\:bg-white.text-white.hover\\:text-red-500.py-2.px-4.border.border-gray-400.hover\\:border-transparent.uppercase.transition.ease-in-out.duration-300.mr-5';
+      await page.waitForSelector(selector);
+      await page.$eval(selector, button => button.click());
   
-      await Promise.all([
-        page.waitForNavigation(),
-        await page.click('button:text("Connexion")'),
-      ]);
+  
+      const selector2 = 'button[type="submit"].bg-green-500';
+      await page.waitForSelector(selector2);
+    await page.$eval(selector2, button => button.click());
+
   
     
       const cookies = await page.cookies();
