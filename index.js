@@ -31,11 +31,13 @@ async function performLogin() {
     await page.type('#password', 'agdHn8DMnc#J!zjm');
 
     const selector2 = 'button[type="submit"].bg-green-500';
+    await page.waitForSelector(selector2);
     await page.$eval(selector2, button => button.click());
 
 
 
     const cookies = await page.cookies();
+    console.log(cookies)
     authCookies = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
 
     await browser.close();
