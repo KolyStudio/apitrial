@@ -23,9 +23,9 @@ async function performLogin() {
     const page = await browser.newPage();
 
     await page.goto('https://www.prelinker.com/b/#/');
-    const selector = '.lg\\:mt-0.block.lg\\:inline-block.bg-transparent.hover\\:bg-white.text-white.hover\\:text-red-500.py-2.px-4.border.border-gray-400.hover\\:border-transparent.uppercase.transition.ease-in-out.duration-300.mr-5';
+    const selector = 'button.lg\\:mt-0.block.lg\\:inline-block.bg-transparent.hover\\:bg-white.text-white.hover\\:text-red-500.py-2.px-4.border.border-gray-400.hover\\:border-transparent.uppercase.transition.ease-in-out.duration-300.mr-5';
+    await page.waitForSelector(selector);
     await page.$eval(selector, button => button.click());
-
 
     await page.type('#email-address', 'PierreTorres');
     await page.type('#password', 'agdHn8DMnc#J!zjm');
