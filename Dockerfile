@@ -1,46 +1,11 @@
-# syntax=docker/dockerfile:1
+FROM ghcr.io/puppeteer/puppeteer:19.7.2
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.17.0
-FROM node:${NODE_VERSION}-slim as base
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
-LABEL fly_launch_runtime="Node.js"
+WORKDIR /usr/src/app
 
-# Node.js app lives here
-WORKDIR /app
-
-# Set production environment
-ENV NODE_ENV="production"
-
-# Install Google Chrome for applications that need it (e.g., Puppeteer)
-RUN apt-get update -qq && \
-    apt-get install -y wget gnupg && \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y build-essential pkg-config python-is-python3
-
-# Install node modules
-COPY --link package-lock.json package.json ./
+COPY package*.json ./
 RUN npm ci
-
-# Copy application code
-COPY --link . .
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["npm", "run", "start"]
+COPY . .
+CMD [ "node", "index.js" ]
