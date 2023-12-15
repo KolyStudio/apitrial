@@ -17,9 +17,9 @@ app.use(cors())
 // Cette fonction effectue le processus de connexion
 async function performLogin() {
   try {
-    const browser = await puppeteer.launch(
-      
-    );
+    const browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
+  });
     const page = await browser.newPage();
 
     await page.goto('https://www.prelinker.com');
